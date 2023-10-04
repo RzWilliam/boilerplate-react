@@ -1,25 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { UrlContext } from "../context/UrlContext";
+import Loader from "./Loader";
+import Pikachu from "../assets/pikachu.png";
 
-export default function DataFetch(props) {
+export default function DataFetch() {
     const [error, setError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState(null);
+    const { url } = useContext(UrlContext);
 
     useEffect(() => {
         async function fetchData() {
-            if (props.url.length > 0) {
+            if (url.length > 0) {
                 setIsLoading(true);
                 try {
-                    const response = await fetch(props.url);
+                    const response = await fetch(url);
 
                     if (!response.ok) {
-                        throw new Error("Something went wrong");
+                        throw new Error("No pokemon found");
                     }
 
                     const responseData = await response.json();
 
                     setData(responseData);
                     setIsLoading(false);
+                    setError("");
                 } catch (error) {
                     setError(error.message);
                     setIsLoading(false);
@@ -28,19 +33,28 @@ export default function DataFetch(props) {
         }
 
         fetchData();
-    }, [props.url]);
+    }, [url]);
 
     return (
         <div>
-            {isLoading && <p>Loading ...</p>}
+            {isLoading && <Loader />}
             {!isLoading && error.length < 1 && data !== null && (
-                <ul>
-                    {data.results.map((item, index) => (
-                        <li key={index}>{item}</li>
-                    ))}
-                </ul>
+                <div className="flex flex-col gap-2 items-center">
+                    <p className="font-bold">ID : {data.id}</p>
+                    <img
+                        className="w-32"
+                        alt={data.name}
+                        src={data.sprites.front_default}
+                    />
+                    <p className="capitalize font-bold">{data.name}</p>
+                </div>
             )}
-            {!isLoading && error.length > 1 && <p>{error}</p>}
+            {!isLoading && error.length > 1 && (
+                <div className="flex flex-col gap-2 items-center">
+                    <img src={Pikachu} className="w-32" alt="Pikachu Shocked" />
+                    <p className="font-bold">{error}</p>
+                </div>
+            )}
         </div>
     );
 }
