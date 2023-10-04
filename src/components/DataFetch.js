@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { UrlContext } from "../context/UrlContext";
 import Loader from "./Loader";
 import Pikachu from "../assets/pikachu.png";
+import Pokemon from "./Pokemon";
 
 export default function DataFetch() {
     const [error, setError] = useState("");
@@ -39,15 +40,7 @@ export default function DataFetch() {
         <div>
             {isLoading && <Loader />}
             {!isLoading && error.length < 1 && data !== null && (
-                <div className="flex flex-col gap-2 items-center">
-                    <p className="font-bold">ID : {data.id}</p>
-                    <img
-                        className="w-32"
-                        alt={data.name}
-                        src={data.sprites.front_default}
-                    />
-                    <p className="capitalize font-bold">{data.name}</p>
-                </div>
+                <Pokemon data={data}/>
             )}
             {!isLoading && error.length > 1 && (
                 <div className="flex flex-col gap-2 items-center">
