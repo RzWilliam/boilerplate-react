@@ -6,7 +6,7 @@ A minimalistic boilerplate for starting a new React project.
 
 - Preconfigured with essential packages for React development.
 - File structure organized for scalability and maintainability.
-- Includes basic styling setup with SASS.
+- Includes styling setup with SASS and Tailwing.
 - Includes testing setup with Jest, React Testing Library and Husky.
 - Includes configuration file for Prettier.
 
